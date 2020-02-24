@@ -1,6 +1,7 @@
 const OBSERVADOR = 1;
 const NOMIO = 2;
 const CRUNCHBASE = 3;
+const FORBES = 4;
 
 
 function rm_observador_premium_placeholders() {
@@ -41,6 +42,22 @@ function rm_crunch_premium_placeholders() {
     document.querySelectorAll("html")[0].classList.remove("cdk-global-scrollblock")
 }
 
+function rm_forbes_adblock_placeholders() {
+    /**
+     * This function will not do the job 100% right. They use some lazy loadings on images and this
+     * will not perform any action on those.
+     * TODO: fix lazy loading
+     */
+    // remove adblock placeholder
+    [].forEach.call(document.querySelectorAll("adblock-modal"), function (elem) {
+        elem.remove()
+    });
+
+    // give focus to body (to enable scrolling)
+    document.querySelectorAll(".article-fixed")[0].style.height = "100%";
+    document.querySelectorAll(".article-fixed")[0].style.overflowY = "scroll";
+}
+
 console.log("Running");
 
 let HOST = 0;
@@ -51,6 +68,8 @@ if (window.location.href.includes("observador.pt")) {
     HOST = NOMIO
 } else if (window.location.href.includes("crunchbase.com")) {
     HOST = CRUNCHBASE
+}else if (window.location.href.includes("forbes.com")) {
+    HOST = FORBES
 }
 
 switch (HOST) {
@@ -65,6 +84,10 @@ switch (HOST) {
     case CRUNCHBASE:
         console.log("Removing Premium placeholders from crunchbase.com");
         rm_crunch_premium_placeholders();
+        break;
+    case FORBES:
+        console.log("Removing Premium placeholders from forbes.com");
+        rm_forbes_adblock_placeholders();
         break;
     default:
         alert("Not implemented for " + window.location.href)
